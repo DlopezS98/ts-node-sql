@@ -7,6 +7,8 @@ export default class Users extends Model implements IUser {
     id!: number;
     email!: string;
     username!: string;
+    normalized_email!: string;
+    normalized_username!: string;
     password!: string;
     deleted!: boolean;
     created_at!: Date;
@@ -14,6 +16,8 @@ export default class Users extends Model implements IUser {
 
     public async $beforeInsert(queryContext: QueryContext): Promise<void> {
         const salt: string = await genSalt(10);
+        this.normalized_email = this.email.toUpperCase().trim();
+        this.normalized_username = this.username.toLocaleUpperCase().trim();
         this.password = await hash(this.password, salt);
     }
 
@@ -26,6 +30,8 @@ export interface IUser {
     id: number;
     email: string;
     username: string;
+    normalized_email: string;
+    normalized_username: string;
     password: string;
     deleted: boolean;
     created_at: Date;

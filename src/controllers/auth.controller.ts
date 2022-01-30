@@ -13,7 +13,7 @@ export default class AuthController {
 
     public async SignUp(req: Request, res: Response): Promise<Response> {
         try {
-            const user = req.body as Pick<UserDTO, "email" | "username" | "password">
+            const user = req.body as Pick<UserDTO, "email" | "username" | "password">;
             const data = await this.userRepository.create(user.email, user.username, user.password);
             if(data.error) return res.status(StatusCode.BadRequest).json(new HttpResponse({ message: data.message }));
 

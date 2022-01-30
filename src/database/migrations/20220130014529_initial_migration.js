@@ -10,6 +10,8 @@ exports.up = function(knex) {
       table.string("email", 80).notNullable().unique();
       table.string("username", 50).notNullable();
       table.string("password").notNullable();
+      table.string("normalized_username").notNullable();
+      table.string("normalized_email").notNullable();
       table.boolean("deleted").notNullable().defaultTo(false);
       table.timestamps(true, true);
   })
