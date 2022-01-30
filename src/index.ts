@@ -1,3 +1,4 @@
+import './paths';
 import app from './app';
 import PsqlConnection from "./database/connection";
 class Main {

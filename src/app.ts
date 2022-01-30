@@ -3,7 +3,8 @@ import cors from "cors";
 
 import Environment from "./config/environment";
 import { knexQuery } from "./database/connection";
-import { IProductDetail } from "database/models/ProductDetails.model";
+import { IProductDetail } from "./database/models/ProductDetails.model";
+import authRoutes from "@Routes/auth.routes";
 
 const environment = new Environment();
 
@@ -20,5 +21,7 @@ app.get('/', async (req: Request, res: Response) => {
     const products = await knexQuery<IProductDetail>("product_details").select("id", "product_id", "category_id", "description", "attributes").where("deleted", "<>", true);
     res.status(200).json(products);
 });
+
+app.use(authRoutes);
 
 export default app;
