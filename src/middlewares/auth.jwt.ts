@@ -16,8 +16,8 @@ export const verifyToken = async (req: Request, res: Response, next: NextFunctio
     try {
         const token = rawToken?.split(' ')[1];
         const decoded = jwt.verify(token, env.JWT_SECRET_KEY) as JwtPayload;
-        (req as any).userId = decoded.id;
-        const user = await Users.query().findById((req as any).userId);
+        (req as any).user = decoded;
+        const user = await Users.query().findById((req as any).user.id);
         if(!user) return res.status(StatusCode.NotFound).json(new HttpResponse({ message: "User not found", statusCode: StatusCode.NotFound }));
         next();
     } catch (error) {
