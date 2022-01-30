@@ -9,6 +9,7 @@ export default class AuthController {
     constructor(){
         this.userRepository = new UserRepository();
         this.SignUp = this.SignUp.bind(this);
+        this.SignIn = this.SignIn.bind(this);
     }
 
     public async SignUp(req: Request, res: Response): Promise<Response> {
@@ -22,7 +23,22 @@ export default class AuthController {
             return res.status(StatusCode.InternalServerError).json(new HttpResponse({
                 message: error.message,
                 statusCode: StatusCode.InternalServerError
-            }))
+            }));
+        }
+    }
+
+    public async SignIn(req: Request, res: Response): Promise<Response> {
+        try {
+            const user = req.body as { user: string, password: string };
+            const data = await this.userRepository.validateCredentials(user.user, user.password);
+            if(data.error) return res.status(StatusCode.BadRequest).json(new HttpResponse({ message: data.message }));
+
+            return res.status(StatusCode.Ok).json(new HttpResponse({ message: "You're logged in successfully!", statusCode: StatusCode.Ok, data: data.data }));
+        } catch (error: any) {
+            return res.status(StatusCode.InternalServerError).json(new HttpResponse({
+                message: error.message,
+                statusCode: StatusCode.InternalServerError
+            }));
         }
     }
 }

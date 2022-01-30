@@ -1,5 +1,6 @@
 import Users, { IUser } from "@Models/Users.model";
 import { knexQuery } from "@Database/connection";
+import { validateEmail } from "@Shared/constants/validations";
 
 export default class UserRepository {
 
@@ -38,5 +39,40 @@ export default class UserRepository {
         return users;
     }
 
+    public async getByEmailOrUsername(emailOrUsername: string): Promise<Partial<IUser> | null> {
+        const isEmail = validateEmail(emailOrUsername);
+        const column: string = isEmail ? "normalized_email" : "normalized_username";
+        const usermodel = await Users.query().select("*").where(column, "=", emailOrUsername.toUpperCase().trim()).first();
+        
+        if(!usermodel) return null;
 
+        const user = this.mapUser(usermodel);
+        return user;
+    }
+
+    public async validateCredentials(emailOrUsername: string, password: string): Promise<{ error: boolean, message: string, data: Partial<IUser> | null }> {
+        const isEmail = validateEmail(emailOrUsername);
+        const column: string = isEmail ? "normalized_email" : "normalized_username";
+        const usermodel = await Users.query().select("*").where(column, "=", emailOrUsername.toUpperCase().trim()).first();
+        if(!usermodel) return { error: true, message: `The ${isEmail ? "email" : "username"} doesn't exists!`, data: null }
+        
+        const match = await usermodel.matchPassword(password);
+        const user = this.mapUser(usermodel);
+        return (match 
+            ? { error: false, message: "", data: user } 
+            : { error: true, message: "The password is wrong!", data: null })
+    }
+
+    public mapUser(model: Users): Partial<IUser> {
+        const { id, username, email, normalized_email, normalized_username, created_at, updated_at } = model;
+        return {
+            id,
+            username,
+            email,
+            normalized_email,
+            normalized_username,
+            created_at,
+            updated_at
+        }
+    }
 }

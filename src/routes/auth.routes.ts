@@ -5,5 +5,5 @@ const authCtrl: AuthController = new AuthController();
 const router: Router = Router();
 
 router.post('/signup', authCtrl.SignUp);
-// router.post('/signin', authCtrl.SignIn);
+router.post('/signin', authCtrl.SignIn);
 export default router;
