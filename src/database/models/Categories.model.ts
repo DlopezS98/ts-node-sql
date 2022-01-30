@@ -1,7 +1,7 @@
 import { Model } from "objection";
 
-export default class Products extends Model implements IProduct {
-    static get tableName(): string { return "products" };
+export default class Categories extends Model implements ICategory {
+    static get tableName(): string { return "categories" };
 
     id!: number;
     name!: string;
@@ -11,7 +11,7 @@ export default class Products extends Model implements IProduct {
     updated_at!: Date;
 }
 
-export interface IProduct {
+export interface ICategory {
     id: number;
     name: string;
     description?: string;
