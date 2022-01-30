@@ -1,7 +1,9 @@
 import { config } from "dotenv";
+// import { join } from 'path';
 
 export default class Environment {
     constructor(){
+        //{ path: join(__dirname, '..', '..', '.env') }
         config();
     }
 
@@ -22,7 +24,7 @@ export default class Environment {
     }
 
     public get DATABASE(): string {
-        return process.env.DATABASE_NAME || "ShoppingCartDB";
+        return process.env.DATABASE_NAME || "dev_shopping_cart_db";
     }
 
     public get JWT_SECRET_KEY() : string {
