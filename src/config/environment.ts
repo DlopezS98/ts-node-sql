@@ -16,7 +16,7 @@ export default class Environment {
     }
 
     public get USER() : string {
-        return process.env.USERNAME || "DlopezS98";
+        return process.env.USERNAME || "postgres";
     }
 
     public get PASSWORD() : string {

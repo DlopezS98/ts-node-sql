@@ -8,7 +8,7 @@ export default class UserRepository {
         const response = await this.verifyIfUserExists(email, username);
         if(response.error) return { error: response.error, message: response.message, data: null };
 
-        const user = await Users.query().insert({
+        await Users.query().insert({
             email,
             username,
             password
@@ -17,7 +17,7 @@ export default class UserRepository {
         return { error: false, message: "user created successfully!" };
     }
 
-    public async verifyIfUserExists(email: string, username: string): Promise<{ error: boolean, message: string }> {
+    private async verifyIfUserExists(email: string, username: string): Promise<{ error: boolean, message: string }> {
         const _email = await knexQuery<IUser>("users").select("id").where("email", "=", email).first();
         if(_email) return { error: true, message: "email already exists" };
 
