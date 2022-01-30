@@ -3,7 +3,6 @@ import { config } from "dotenv";
 
 export default class Environment {
     constructor(){
-        //{ path: join(__dirname, '..', '..', '.env') }
         config();
     }
 
@@ -15,12 +14,12 @@ export default class Environment {
         return process.env.SERVER_NAME || "DLOPEZS98";
     }
 
-    public get USER() : string {
-        return process.env.USERNAME || "postgres";
+    public get USERNAME() : string {
+        return process.env.PSQL_USERNAME || "postgres_username";
     }
 
     public get PASSWORD() : string {
-        return process.env.PASSWORD || "DlopezS98.SQL";
+        return process.env.PSQL_PASSWORD || "${Password}";
     }
 
     public get DATABASE(): string {

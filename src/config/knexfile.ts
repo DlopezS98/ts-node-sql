@@ -10,7 +10,7 @@ export const KnexConfig: Record<string, Knex.Config> = {
 		client: "postgresql",
 		connection: {
 			database: environment.DATABASE,
-			user: environment.USER,
+			user: environment.USERNAME,
 			password: environment.PASSWORD,
 		},
 		pool: {
