@@ -1,23 +1,15 @@
-import sql, { config, ConnectionPool } from "mssql";
-import Environment from "../config/environment";
+import { Knex, knex } from "knex";
+import { KnexConfig } from "../config/knexfile";
+import { Model } from "objection";
 
-export default class SqlConnection {
-
-    private readonly databaseConfig: config;
+export default class PsqlConnection {
+    private readonly db: Knex;
 
     constructor() {
-        const environment = new Environment();
-        this.databaseConfig = {
-            user: environment.USER,
-            password: environment.PASSWORD,
-            server: environment.SERVER,
-            database: environment.DATABASE,
-            options: {
-                encrypt: true,
-                trustServerCertificate: true
-            }
-        }
+        this.db = knex(KnexConfig.development);
     }
 
-    public get = async (): Promise<ConnectionPool> => await sql.connect(this.databaseConfig);;
+    public setUpDatabase() {
+        Model.knex(this.db);
+    }
 }

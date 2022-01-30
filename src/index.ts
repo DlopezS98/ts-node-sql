@@ -1,11 +1,17 @@
-import SqlConnection from "./database/connection";
+import app from './app';
+import PsqlConnection from "./database/connection";
+class Main {
+    private readonly db: PsqlConnection;
 
-const connection: SqlConnection = new SqlConnection();
+    constructor() {
+        this.db =  new PsqlConnection();
+    }
 
-async function main() {
-    const pool = await connection.get();
-    const result = await pool.query("SELECT CURRENT_TIMESTAMP AS DATE");
-    console.log(result);
+    public async init(): Promise<void> {
+        this.db.setUpDatabase();
+        await app.listen(app.get('port'));
+        console.log("Server Listening on Port:", app.get("port"));
+    }
 }
 
-main();
+new Main().init();
