@@ -1,9 +1,10 @@
 import express, { Express, urlencoded, json, Request, Response } from "express";
 import cors from "cors";
+import morgan from "morgan";
 
-import Environment from "./config/environment";
-import { knexQuery } from "./database/connection";
-import { IProductDetail } from "./database/models/ProductDetails.model";
+import Environment from "@Config/environment";
+import { knexQuery } from "@Database/connection";
+import { IProductDetail } from "@Models/ProductDetails.model";
 import authRoutes from "@Routes/auth.routes";
 
 const environment = new Environment();
@@ -13,6 +14,7 @@ const app: Express = express();
 app.set('port', environment.PORT);
 
 // middlewares
+app.use(morgan("dev"))
 app.use(cors());
 app.use(urlencoded({ extended: false }));
 app.use(json());

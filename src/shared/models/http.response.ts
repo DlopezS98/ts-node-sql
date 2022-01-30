@@ -1,4 +1,4 @@
-import { HttpStatusCodes } from "./status.codes";
+import { HttpStatusCodes } from "@Shared/types/status.codes";
 
 export default class HttpResponse<T = any> {
     constructor(value: HttpResponse) {

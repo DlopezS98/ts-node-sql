@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import HttpResponse from "@CommonModels/http.response";
-import { HttpStatusCodes as StatusCode } from "@CommonModels/status.codes";
+import HttpResponse from "@Shared/models/http.response";
+import { HttpStatusCodes as StatusCode } from "@Shared/types/status.codes";
 import UserRepository from "@Repositories/user.repository";
-import UserDTO from "@CommonModels/DTOs/user.dto";
+import UserDTO from "@Shared/models/DTOs/user.dto";
 
 export default class AuthController {
     private readonly userRepository: UserRepository;
