@@ -42,7 +42,7 @@ export default class ShoppingCartController {
         try {
             const data = req.body as IShoppingCartDto;
             const userId = (req as any).user.id;
-            const result = await this.shoppingCartRepository.update(data, userId);
+            const result = await this.shoppingCartRepository.updateCart(data, userId);
             if(!result.success) return res.status(StatusCode.BadRequest).json(new HttpResponse({ message: result.message as string }));
 
             return res.status(StatusCode.Ok)
@@ -77,7 +77,7 @@ export default class ShoppingCartController {
         try {
             const productId = (req.params as any).id;
             const userId = (req as any).user.id;
-            const result = await this.shoppingCartRepository.deleteItem(productId, userId);
+            const result = await this.shoppingCartRepository.deleteProduct(productId, userId);
             if(!result.success) return res.status(StatusCode.BadRequest).json(new HttpResponse({ message: result.message as string }));
 
             return res.status(StatusCode.Ok)

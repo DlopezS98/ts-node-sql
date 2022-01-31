@@ -4,11 +4,11 @@
  */
 exports.seed = async function(knex) {
   // truncate all existing tables
-  await knex.raw('TRUNCATE TABLE "users" CASCADE');
   await knex.raw('TRUNCATE TABLE "products" CASCADE');
   await knex.raw('TRUNCATE TABLE "product_details" CASCADE');
   await knex.raw('TRUNCATE TABLE "categories" CASCADE');
   await knex.raw('TRUNCATE TABLE "shopping_cart" CASCADE');
+  await knex.raw('TRUNCATE TABLE "cart_details" CASCADE');
 
   // Inserts seed entries
   await knex('products').insert([

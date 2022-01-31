@@ -1,4 +1,6 @@
+import { ICartDetailsDto } from "./cartDetails.dto";
+
 export default interface IShoppingCartDto {
-    product_detail_id: number;
-    quantity: number;
+    cartId: number;
+    cartDetails: ICartDetailsDto[];
 }

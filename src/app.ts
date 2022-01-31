@@ -6,6 +6,7 @@ import Environment from "@Config/environment";
 import pkg from "../package.json";
 import authRoutes from "@Routes/auth.routes";
 import cartRoutes from "@Routes/shoppingCart.routes";
+import prodDetailRoutes from "@Routes/productDetails.routes";
 
 const environment = new Environment();
 
@@ -32,5 +33,6 @@ app.get('/', async (req: Request, res: Response) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/shopping_cart", cartRoutes);
+app.use("/api/product_details", prodDetailRoutes);
 
 export default app;
