@@ -1,4 +1,5 @@
-import { Model } from "objection";
+import { Model, ModelOptions, QueryContext } from "objection";
+import ProductDetails from "./ProductDetails.model";
 
 export default class ShoppingCart extends Model implements IShoppingCart {
     static get tableName(): string { return "shopping_cart" };
@@ -7,12 +8,40 @@ export default class ShoppingCart extends Model implements IShoppingCart {
     product_detail_id!: number;
     user_id!: number;
     quantity!: number;
-    total!: number;
+    sub_total!: number;
     tax_rate?: number | undefined;
-    total_price!: number;
+    total!: number;
     deleted!: boolean;
     created_at!: Date;
     updated_at!: Date;
+
+    async $beforeInsert(queryContext: QueryContext): Promise<any> {
+        const data = await ProductDetails.query(queryContext.transaction)
+                                            .select("price", "tax_rate")
+                                            .where("id", "=", this.product_detail_id)
+                                            .where("deleted", "<>", true)
+                                            .first();
+        if(!data) throw new Error("The relationship doesn't exists between shooping cart & product details");
+
+        this.sub_total = data.price * this.quantity;
+        this.tax_rate = data.tax_rate ? (this.quantity * data.tax_rate) : undefined ;
+        this.total = this.sub_total + (this.tax_rate ?? 0);
+    }
+
+    async $beforeUpdate(opt: ModelOptions, queryContext: QueryContext): Promise<any> {
+        await super.$beforeUpdate(opt, queryContext);
+        const data = await ProductDetails.query(queryContext.transaction)
+                                            .select("price", "tax_rate")
+                                            .where("id", "=", this.product_detail_id)
+                                            .where("deleted", "<>", true)
+                                            .first();
+        if(!data) throw new Error("The relationship doesn't exists between shooping cart & product details");
+        
+        this.sub_total = data.price * this.quantity;
+        this.tax_rate = data.tax_rate ? (this.quantity * data.tax_rate) : undefined ;
+        this.total = this.sub_total + (this.tax_rate ?? 0);
+        this.updated_at = new Date();
+    }
 }
 
 export interface IShoppingCart {
@@ -20,9 +49,9 @@ export interface IShoppingCart {
     product_detail_id: number;
     user_id: number;
     quantity: number;
-    total: number;
+    sub_total: number;
     tax_rate?: number;
-    total_price: number;
+    total: number;
     deleted: boolean;
     created_at: Date;
     updated_at: Date;

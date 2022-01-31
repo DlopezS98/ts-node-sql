@@ -3,8 +3,9 @@ import cors from "cors";
 import morgan from "morgan";
 
 import Environment from "@Config/environment";
-import authRoutes from "@Routes/auth.routes";
 import pkg from "../package.json";
+import authRoutes from "@Routes/auth.routes";
+import cartRoutes from "@Routes/shoppingCart.routes";
 
 const environment = new Environment();
 
@@ -30,5 +31,6 @@ app.get('/', async (req: Request, res: Response) => {
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/api/shopping_cart", cartRoutes);
 
 export default app;

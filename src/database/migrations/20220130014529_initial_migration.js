@@ -47,9 +47,9 @@ exports.up = function(knex) {
     table.integer("product_detail_id").references("id").inTable("product_details").notNullable();
     table.integer("user_id").references("id").inTable("users").notNullable();
     table.integer("quantity").notNullable();
-    table.decimal("total").notNullable();
+    table.decimal("sub_total").notNullable();
     table.decimal("tax_rate").nullable();
-    table.decimal('total_price').notNullable();
+    table.decimal('total').notNullable();
     table.boolean("deleted").notNullable().defaultTo(false);
     table.timestamps(true, true);
   })
