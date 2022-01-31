@@ -13,6 +13,8 @@ export default class ShoppingCartController {
         this.create = this.create.bind(this);
         this.update = this.update.bind(this);
         this.getCart = this.getCart.bind(this);
+        this.deleteProduct = this.deleteProduct.bind(this);
+        this.delete = this.delete.bind(this);
     }
 
     async create(req: Request, res: Response): Promise<Response> {
@@ -63,6 +65,47 @@ export default class ShoppingCartController {
             const cart = await this.shoppingCartRepository.list(userId);
             return res.status(StatusCode.Ok)
                         .json(cart);
+        } catch (error: any) {
+            return res.status(StatusCode.InternalServerError).json(new HttpResponse({
+                message: error.message,
+                statusCode: StatusCode.InternalServerError
+            }));
+        }
+    }
+
+    async deleteProduct(req: Request, res: Response): Promise<Response> {
+        try {
+            const productId = (req.params as any).id;
+            const userId = (req as any).user.id;
+            const result = await this.shoppingCartRepository.deleteItem(productId, userId);
+            if(!result.success) return res.status(StatusCode.BadRequest).json(new HttpResponse({ message: result.message as string }));
+
+            return res.status(StatusCode.Ok)
+                        .json(new HttpResponse({ 
+                            message: result.message as string, 
+                            success: true, 
+                            statusCode: StatusCode.Ok
+                        }));
+        } catch (error: any) {
+            return res.status(StatusCode.InternalServerError).json(new HttpResponse({
+                message: error.message,
+                statusCode: StatusCode.InternalServerError
+            }));
+        }
+    }
+
+    async delete(req: Request, res: Response): Promise<Response> {
+        try {
+            const userId = (req as any).user.id;
+            const result = await this.shoppingCartRepository.deleteCart(userId);
+            if(!result.success) return res.status(StatusCode.BadRequest).json(new HttpResponse({ message: result.message as string }));
+
+            return res.status(StatusCode.Ok)
+                        .json(new HttpResponse({ 
+                            message: result.message as string, 
+                            success: true, 
+                            statusCode: StatusCode.Ok
+                        }));
         } catch (error: any) {
             return res.status(StatusCode.InternalServerError).json(new HttpResponse({
                 message: error.message,

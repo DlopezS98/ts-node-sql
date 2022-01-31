@@ -30,6 +30,11 @@ export default class ShoppingCart extends Model implements IShoppingCart {
 
     async $beforeUpdate(opt: ModelOptions, queryContext: QueryContext): Promise<any> {
         await super.$beforeUpdate(opt, queryContext);
+
+        this.updated_at = new Date();
+        const deleting = this.deleted ?? false;
+        if(deleting) return;
+
         const data = await ProductDetails.query(queryContext.transaction)
                                             .select("price", "tax_rate")
                                             .where("id", "=", this.product_detail_id)
@@ -40,7 +45,6 @@ export default class ShoppingCart extends Model implements IShoppingCart {
         this.sub_total = data.price * this.quantity;
         this.tax_rate = data.tax_rate ? (this.quantity * data.tax_rate) : undefined ;
         this.total = this.sub_total + (this.tax_rate ?? 0);
-        this.updated_at = new Date();
     }
 }
 

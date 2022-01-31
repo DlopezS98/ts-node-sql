@@ -7,6 +7,8 @@ const router: Router = Router();
 
 router.post('/', verifyToken, cartCtrl.create);
 router.patch('/', verifyToken, cartCtrl.update);
+router.delete('/product/:id', verifyToken, cartCtrl.deleteProduct);
 router.get('/', verifyToken, cartCtrl.getCart);
+router.delete('/', verifyToken, cartCtrl.delete);
 
 export default router;
